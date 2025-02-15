@@ -27,22 +27,24 @@ Please select a function to continue:
 
 (sample input 1 or 2)
 
-<class 'str'> function : choose a function to proceed
-<class 'str'> input_keyword : input stock company keyword here
-<class 'str'> input_start : 2019-1-1
-<class 'str'> input_end : 2020-1-1
-<class 'str'> graph_choice : choose the graph you wish to plot
-<class 'str'> next_word :
-Would you like to
+<class 'str'> function : choose a function to proceed  
+<class 'str'> input_keyword : input stock company keyword here  
+<class 'str'> input_start : 2019-1-1  
+<class 'str'> input_end : 2020-1-1  
+<class 'str'> graph_choice : choose the graph you wish to plot  
+<class 'str'> next_word :  
+Would you like to  
+
+
 
 return to menu
-exit program
+exit program  
 (sample input : 1 or 2)
-<class 'int'> ma : 10
-<class 'int'> year : 2020
-<class 'int'> month : 2
-<class 'int'> day : 2
-<class 'str'> check_code_next : what is the next step?
-<class 'str'> view_trend_next : what is the next step?
-<class 'str'> view_trend_next : what is the next step?
+<class 'int'> ma : 10  
+<class 'int'> year : 2020  
+<class 'int'> month : 2  
+<class 'int'> day : 2  
+<class 'str'> check_code_next : what is the next step?  
+<class 'str'> view_trend_next : what is the next step?  
+<class 'str'> view_trend_next : what is the next step?  
 
