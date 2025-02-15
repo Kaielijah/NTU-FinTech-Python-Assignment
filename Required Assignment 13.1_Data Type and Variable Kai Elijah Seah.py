@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
+from dotenv import load_dotenv
 
+load_dotenv()  # Load environment variables from .env file
 API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")  # Fetch API Key from environment
 
 # print(data)  # Print stock details
