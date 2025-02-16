@@ -2,6 +2,7 @@ import os
 import requests
 import matplotlib.pyplot as plt
 import pandas as pd
+import sys
 from alpha_vantage.timeseries import TimeSeries
 from datetime import datetime
 from dotenv import load_dotenv
@@ -15,7 +16,10 @@ def user_input():
     #welcome user and select a function
     #TODO : 1. Design a welcome message that ask user to select a function, assign this message to a string variable 'word'
     word = "Welcome to Stock Master!\n"
-    # print(f"{type(word)}" + " word :\n" + word)
+    print(f"{type(word)}" + " word :\n" + word)
+    print("DEBUG: Printing welcome message now...")  # Debug statement
+    print(word, flush=True)  # Ensure immediate output
+    print("DEBUG: Welcome message should be visible above.")  # Debug statement
 
     #TODO : 2. Define a string variable 'function' . (This variable will be used to hold user's choice of function.)
     function = input("Please select a function to continue: \n\n(1) Search for a stock code by ticker\n(2) View stock trend by code\n\nsample input 1 or 2\n")
@@ -34,14 +38,15 @@ def check_code():
 
     # Call search_ticker() to get the stock ticker
     ticker = search_ticker(input_keyword)
+
     if ticker:
         print(f"\nThe selected ticker symbol is: {ticker}")
     else:
         print("\nNo valid ticker found.")
 
-    # print(f"Keyword entered: {input_keyword}")
-    check_code = "What is the next step?"
-    return input_keyword, check_code
+    # print(f"Keyword entered: {input_keyword}"
+    check_code_next = "What is the next step?"
+    return input_keyword, check_code_next
     
 # get source data (code provided), the source data is stored in code_dic, a dictionary with all tickers' company name as key and stock code as value
 ## using alpha advantage to fetch ticker and return results. Not sure where the source data is downloaded for us to use in this case, is code_dic hypothetical or is there an actual file? 
@@ -96,7 +101,7 @@ def view_trend():
 
     #ask user to input stock code, start date and end date
     #TODO : 6. Define 3 string variables 'code','input_start','input_end' . (These variable will be used to hold user's choice of stock code,start date and end date)
-    code = input("Enter stock ticker:")
+    code = input("Enter stock ticker stock code which is presented earlier:")
     input_start = input("Enter start date (DD-MM-YYYY):")
     input_end = input("Enter end date (DD-MM-YYYY):")
 
@@ -153,27 +158,28 @@ def next_request():
 
     #ask user to select next step to proceed with
     #TODO : 10. Design a message that ask user to select next step to take, assign this message to a string variable 'next_word'
-    
+    next_word = input("Would you like to continue or exit?")
     #TODO : 11. Define a string variable 'next_step' . (This variable will be used to hold user's choice of next step to take.)
-
-    return
+    next_step = input("Enter next step.")
+    
     return next_word,next_step
 
 
 def input_to_date(input_date):
 
     #string to integer
-
     #TODO: 12. Define 3 int variables 'year','month','day', initialise their values randomly
-
+    year = str(input("Enter year"))
+    month = str(input("Enter month"))
+    day = str(input("Enter day"))
     #integer to datetime
-
-    return
+    input_date = f"{int(day):02d}-{int(month):02d}-{int(year)}" #this updates to integer
+    # print(type(input_date), input_date) # for checking output
     return year,month,day
 
 def main():
     word,function,user_input_next = user_input()
-    input_keyword,check_code_next = check_code()
+    input_keyword, ticker, check_code_next = check_code()
     code,input_start,input_end,graph_choice,ma,view_trend_next = view_trend()
     next_word,next_request_next= next_request()
     year,month,day = input_to_date()
@@ -184,6 +190,7 @@ def main():
     print(str(type(word))+ ' word : '+ word)
     print(str(type(function))+ ' function : '+ function)
     print(str(type(input_keyword))+ ' input_keyword : '+ input_keyword)
+    print(str(type(ticker)) + 'ticker : '+ ticker)
     print(str(type(code))+ ' code : '+ code)
     print(str(type(input_start))+ ' input_start : '+ input_start)
     print(str(type(input_end))+ ' input_end : '+ input_end)
@@ -200,4 +207,5 @@ def main():
 #   function call
 
 if __name__== "__main__":
-  main()
+    main()
+  
