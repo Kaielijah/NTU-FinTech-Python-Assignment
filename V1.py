@@ -9,32 +9,71 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
 API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY")  # Fetch API Key from environment
+API_KEY_BACKUP = os.getenv("ALPHA_VANTAGE_API_KEY_BACKUP")
+def test_api_key(api_key):
+    """Function to test if an API key is working"""
+    url = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=apple&apikey={api_key}"
+    response = requests.get(url)
+    
+    # If API response contains an error or rate limit message, return False
+    if response.status_code != 200 or "Error Message" in response.text or "Thank you for using Alpha Vantage" in response.text:
+        print(f"DEBUG: API Key {api_key} failed. Trying another key...")
+        return False
+    return True
 
+# Try primary API key, fallback to backup
+if test_api_key(API_KEY):
+    ACTIVE_API_KEY = API_KEY
+else:
+    print("DEBUG: Switching to backup API key.")
+    if test_api_key(API_KEY_BACKUP):
+        ACTIVE_API_KEY = API_KEY_BACKUP
+    else:
+        print("ERROR: Both API keys failed. Please check your keys or API limits.")
+        exit(1)
+
+# Now, use `ACTIVE_API_KEY` in your API requests
+print("DEBUG: Using API Key ->", ACTIVE_API_KEY)
 # print(data)  # Print stock details
 def user_input():
-
+    global ticker
     #welcome user and select a function
     #TODO : 1. Design a welcome message that ask user to select a function, assign this message to a string variable 'word'
     word = "Welcome to Stock Master!\n"
     print(f"{type(word)}" + " word :\n" + word)
-    print("DEBUG: Printing welcome message now...")  # Debug statement
-    print(word, flush=True)  # Ensure immediate output
-    print("DEBUG: Welcome message should be visible above.")  # Debug statement
 
     #TODO : 2. Define a string variable 'function' . (This variable will be used to hold user's choice of function.)
-    function = input("Please select a function to continue: \n\n(1) Search for a stock code by ticker\n(2) View stock trend by code\n\nsample input 1 or 2\n")
-    # print(function)
+    while True:
+        function = input("Please select a function to continue: \n\n(1) Search for a stock code by ticker\n(2) View stock trend by code\n\nSample input 1 or 2: ")
+        try:
+            function = int(function)  # Convert to integer
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
 
-    #TODO : 3. Define a string variable 'next_step', assign this string as '1' . (This variable will be used to construct a branch in following project blocks.)
-    next_step = "1"
+        if function == 1:
+            next_step = 1
+            print(f"Selected: {function}")
+            
+            input_keyword, ticker, check_code_next = check_code()
+            view_trend(ticker)
+            break
+        elif function == 2:
+            next_step = 2 
+            print(f"Selected: {function}")
+            break
+        else :
+            print("Invalid input. Please enter either 1 or 2.")
+        
     return word,function,next_step
 
 def check_code():
 
 # ask user to input keyword
+    global ticker
 # TODO : 4. Define a string variable 'input_keyword' . (This variable will be used to hold user's input of keyword to search.)
     input_keyword = input("Enter a stock keyword to search: ")
-    print(f"Keyword entered: {input_keyword}")
+    # print(f"Keyword entered: {input_keyword}")
 
     # Call search_ticker() to get the stock ticker
     ticker = search_ticker(input_keyword)
@@ -42,11 +81,11 @@ def check_code():
     if ticker:
         print(f"\nThe selected ticker symbol is: {ticker}")
     else:
-        print("\nNo valid ticker found.")
-
+        print("\nNo valid ticker found. Please try again.")
+        return check_code()
     # print(f"Keyword entered: {input_keyword}"
-    check_code_next = "What is the next step?"
-    return input_keyword, check_code_next
+    check_code_next = 1
+    return input_keyword, ticker, check_code_next
     
 # get source data (code provided), the source data is stored in code_dic, a dictionary with all tickers' company name as key and stock code as value
 ## using alpha advantage to fetch ticker and return results. Not sure where the source data is downloaded for us to use in this case, is code_dic hypothetical or is there an actual file? 
@@ -56,7 +95,7 @@ def search_ticker(keyword):
     
     response = requests.get(url)
     data = response.json()
-
+# Get user input for company search
     if "bestMatches" in data:
         results = data["bestMatches"]
         if len(results) > 0:
@@ -80,41 +119,40 @@ def search_ticker(keyword):
             print("No matches found.")
             return None
     else:
-        print("Error fetching data from code_dic. Check your API key and internet connection.")
+        print("Error fetching data from code_dic. API rate limit is 25 requests per day")
+        print(f"DEBUG: Loaded API Key: {API_KEY}")  # Add this before making API calls
+
         return None
 
-# Get user input for company search
-    keyword = input("Enter a company name to search for its ticker: ")
-    ticker = search_ticker(keyword)
-
-    if ticker:
-        print(f"\nThe selected ticker symbol is: {ticker}")
-    else:
-        print("\nNo valid ticker found.")
     #ask for next step
     #TODO : 5. Define a string variable 'next_step' . (This variable will be used to hold user's choice of next step to take.)
     next_step = "2"
     return
     return input_keyword,next_step
 
-def view_trend():
+def view_trend(ticker):
+    print(f"\nGenerating trend graph for: {ticker}")
 
     #ask user to input stock code, start date and end date
     #TODO : 6. Define 3 string variables 'code','input_start','input_end' . (These variable will be used to hold user's choice of stock code,start date and end date)
-    code = input("Enter stock ticker stock code which is presented earlier:")
     input_start = input("Enter start date (DD-MM-YYYY):")
     input_end = input("Enter end date (DD-MM-YYYY):")
 
     #convert string to datetime
-    input_start = datetime.strptime(input_start, "%d-%m-%Y")
-    input_end = datetime.strptime(input_end, "%d-%m-%Y")
+    try:  
+        input_start = datetime.strptime(input_start, "%d-%m-%Y")
+        input_end = datetime.strptime(input_end, "%d-%m-%Y")
+    except ValueError:
+        print("Invalid date format. Please enter dates in DD-MM-YYYY format.")
+        return view_trend(ticker)  # Retry input if incorrect
+    
     #get source data (code provided), the source data is stored in df, a pandas dataframe
-    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={code}&apikey={API_KEY}&outputsize=compact"
+    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={API_KEY}&outputsize=compact"
     response = requests.get(url)
     data = response.json()
     if "Time Series (Daily)" not in data:
         print("Error fetching stock data. Check ticker symbol and API key.")
-        return code, input_start, input_end, None, None, "view_trend_next"
+        return ticker, input_start, input_end, None, None, "view_trend_next"
     
     # Convert JSON to DataFrame
     df = pd.DataFrame.from_dict(data["Time Series (Daily)"], orient="index")
@@ -141,27 +179,62 @@ def view_trend():
 
     plt.xlabel("Date")
     plt.ylabel("Stock Price")
-    plt.title(f"Stock Trend for {code}")
+    plt.title(f"Stock Trend for {ticker}")
     plt.legend()
     plt.grid()
     plt.show()
-
+    next_request()
     #TODO : 8. Define a int variable 'ma' with value 10 . (This variable will be used to hold user's choice of moving average graph frequency.)
     ma = 10
     #ask for next step
     #TODO : 9. Define a string variable 'next_step' . (This variable will be used to hold user's choice of next step to take.)
-    next_step = input("Would you like to \n1. Return to menu?\n 2. Exit program\n(sample input: 1 or 2)")
-    
-    return code,input_start,input_end,graph_choice,ma,next_step
+     
+    while True:
+        next_step = input("Would you like to \n1. Return to menu?\n 2. Exit program\n(sample input: 1 or 2)")
+        try:
+            next_step = int(next_step)  # Convert to integer
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
+
+        if next_step == 1:
+            print("Returning to main menu...")
+            main()
+            break
+        elif next_step == 2:
+            print("\nExiting program.")
+            sys.exit()
+            break
+        else :
+            print("Invalid input. Please enter either 1 or 2.") 
+
+        return input_start,input_end,graph_choice,ma,next_step
 
 def next_request():
 
     #ask user to select next step to proceed with
     #TODO : 10. Design a message that ask user to select next step to take, assign this message to a string variable 'next_word'
-    next_word = input("Would you like to continue or exit?")
+    # next_word = input("Would you like to continue or exit?")
     #TODO : 11. Define a string variable 'next_step' . (This variable will be used to hold user's choice of next step to take.)
-    next_step = input("Enter next step.")
-    
+    # next_step = input("Enter next step.")
+    while True:
+        next_step = input("Would you like to \n1. Return to menu?\n 2. Exit program\n(sample input: 1 or 2)")
+        try:
+            next_step = int(next_step)  # Convert to integer
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            continue
+
+        if next_step == 1:
+            print("Returning to main menu...")
+            main()
+            break
+        elif next_step == 2:
+            print("\nExiting program.")
+            sys.exit()
+            break
+        else :
+            print("Invalid input. Please enter either 1 or 2.") 
     return next_word,next_step
 
 
@@ -208,4 +281,3 @@ def main():
 
 if __name__== "__main__":
     main()
-  
