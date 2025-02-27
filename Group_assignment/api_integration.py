@@ -26,7 +26,7 @@ class StockSearchApp:
         self.result_label.pack(pady=10)
     
     def get_stock_price(self, symbol):
-        API_KEY = "d04a9fcb4a835aba213c807a2bc6a0b7"
+        api_key = "d04a9fcb4a835aba213c807a2bc6a0b7"
         url = f"http://api.marketstack.com/v1/eod?access_key={api_key}&symbols={symbol}"
         response = requests.get(url)
         if response.status_code == 200:
