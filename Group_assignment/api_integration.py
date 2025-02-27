@@ -32,3 +32,4 @@ def search_ticker(keyword):
     else:
         print("No matches found.")
         return None
+    
