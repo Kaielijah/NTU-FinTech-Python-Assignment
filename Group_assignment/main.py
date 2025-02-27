@@ -1,4 +1,5 @@
 import tkinter as tk
+import visualization
 from api_integration import StockSearchApp
 from portfolio import PortfolioManager
 from visualization import VisualizationApp
