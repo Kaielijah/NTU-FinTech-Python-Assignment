@@ -2,12 +2,9 @@ import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import sys
-import tkinter
+import tkinter as tk
 from datetime import datetime
 from tkinter import messagebox
-
-# 🎯 MarketStack API Key
-API_KEY = "d04a9fcb4a835aba213c807a2bc6a0b7"
 
 class StockSearchApp:
     def __init__(self, root):
@@ -29,7 +26,7 @@ class StockSearchApp:
         self.result_label.pack(pady=10)
     
     def get_stock_price(self, symbol):
-        api_key = "your_marketstack_api_key"
+        API_KEY = "d04a9fcb4a835aba213c807a2bc6a0b7"
         url = f"http://api.marketstack.com/v1/eod?access_key={api_key}&symbols={symbol}"
         response = requests.get(url)
         if response.status_code == 200:
