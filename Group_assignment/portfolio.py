@@ -11,11 +11,13 @@ class PortfolioTracker:
         self.conn = sqlite3.connect("portfolio.db")
         self.cursor = self.conn.cursor()
         self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS assets (
+            CREATE TABLE IF NOT EXISTS transactions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 asset_name TEXT,
+                transaction_type TEXT, -- "buy" or "sell"
                 quantity REAL,
-                purchase_price REAL
+                price REAL,
+                transaction_date TEXT -- Or INTEGER for timestamp
             )
         """)
         self.conn.commit()
@@ -24,8 +26,8 @@ class PortfolioTracker:
         self.create_widgets()
 
     def create_widgets(self):
-        # Add Asset Frame
-        add_frame = ttk.LabelFrame(self.root, text="Add Asset")
+        # Add Transaction Frame
+        add_frame = ttk.LabelFrame(self.root, text="Add Transaction")
         add_frame.pack(padx=10, pady=10, fill="x")
 
         ttk.Label(add_frame, text="Asset Name:").grid(row=0, column=0, padx=5, pady=5)
@@ -36,28 +38,34 @@ class PortfolioTracker:
         self.quantity_entry = ttk.Entry(add_frame)
         self.quantity_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        ttk.Label(add_frame, text="Purchase Price:").grid(row=2, column=0, padx=5, pady=5)
+        ttk.Label(add_frame, text="Price:").grid(row=2, column=0, padx=5, pady=5)
         self.purchase_price_entry = ttk.Entry(add_frame)
         self.purchase_price_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        ttk.Button(add_frame, text="Add Asset", command=self.add_asset).grid(row=3, column=0, columnspan=2, pady=10)
+        self.transaction_type_var = tk.StringVar(value="buy")
+        ttk.Label(add_frame, text="Transaction Type:").grid(row=3, column=0, padx=5, pady=5)
+        transaction_type_dropdown = ttk.Combobox(add_frame, textvariable=self.transaction_type_var, values=["buy", "sell"])
+        transaction_type_dropdown.grid(row=3, column=1, padx=5, pady=5)
+
+        ttk.Button(add_frame, text="Add Transaction", command=self.add_transaction).grid(row=4, column=0, columnspan=2, pady=10)
 
         # View Portfolio Button
         ttk.Button(self.root, text="View Portfolio", command=self.view_portfolio).pack(pady=10)
 
-    def add_asset(self):
+    def add_transaction(self):
         asset_name = self.asset_name_entry.get()
+        transaction_type = self.transaction_type_var.get()
         try:
             quantity = float(self.quantity_entry.get())
-            purchase_price = float(self.purchase_price_entry.get())
+            price = float(self.purchase_price_entry.get())
         except ValueError:
-            messagebox.showerror("Error", "Invalid input for quantity or purchase price.")
+            messagebox.showerror("Error", "Invalid input for quantity or price.")
             return
 
-        self.cursor.execute("INSERT INTO assets (asset_name, quantity, purchase_price) VALUES (?, ?, ?)",
-                            (asset_name, quantity, purchase_price))
+        self.cursor.execute("INSERT INTO transactions (asset_name, transaction_type, quantity, price, transaction_date) VALUES (?, ?, ?, ?, datetime('now'))",
+                            (asset_name, transaction_type, quantity, price))
         self.conn.commit()
-        messagebox.showinfo("Success", "Asset added successfully.")
+        messagebox.showinfo("Success", "Transaction added successfully.")
         self.clear_entries()
 
     def clear_entries(self):
@@ -69,56 +77,51 @@ class PortfolioTracker:
         portfolio_window = tk.Toplevel(self.root)
         portfolio_window.title("Portfolio Details")
 
-        tree = ttk.Treeview(portfolio_window, columns=("ID", "Asset Name", "Quantity", "Purchase Price"), show="headings")
-        tree.heading("ID", text="ID")
+        tree = ttk.Treeview(portfolio_window, columns=("Asset Name", "Quantity", "Average Price"), show="headings")
         tree.heading("Asset Name", text="Asset Name")
         tree.heading("Quantity", text="Quantity")
-        tree.heading("Purchase Price", text="Purchase Price")
+        tree.heading("Average Price", text="Average Price")
         tree.pack(padx=10, pady=10)
 
-        self.cursor.execute("SELECT * FROM assets")
-        rows = self.cursor.fetchall()
-        for row in rows:
+        # Calculate current holdings
+        asset_holdings = {}
+        self.cursor.execute("SELECT asset_name, transaction_type, quantity, price FROM transactions")
+        transactions = self.cursor.fetchall()
+
+        for asset_name, transaction_type, quantity, price in transactions:
+            if asset_name not in asset_holdings:
+                asset_holdings[asset_name] = {"quantity": 0, "total_price": 0}
+
+            if transaction_type == "buy":
+                asset_holdings[asset_name]["quantity"] += quantity
+                asset_holdings[asset_name]["total_price"] += quantity * price
+            elif transaction_type == "sell":
+                asset_holdings[asset_name]["quantity"] -= quantity
+
+        for asset_name, holdings in asset_holdings.items():
+            quantity = holdings["quantity"]
+            if quantity > 0:
+                average_price = holdings["total_price"] / quantity
+                tree.insert("", tk.END, values=(asset_name, quantity, average_price))
+
+        ttk.Button(portfolio_window, text = "View Transaction History", command = lambda: self.view_transaction_history(portfolio_window)).pack(pady=10)
+
+    def view_transaction_history(self, portfolio_window):
+        transaction_history_window = tk.Toplevel(portfolio_window)
+        transaction_history_window.title("Transaction History")
+
+        tree = ttk.Treeview(transaction_history_window, columns=("Asset Name", "Transaction Type", "Quantity", "Price", "Date"), show="headings")
+        tree.heading("Asset Name", text="Asset Name")
+        tree.heading("Transaction Type", text="Transaction Type")
+        tree.heading("Quantity", text="Quantity")
+        tree.heading("Price", text="Price")
+        tree.heading("Date", text="Date")
+        tree.pack(padx=10, pady=10)
+
+        self.cursor.execute("SELECT asset_name, transaction_type, quantity, price, transaction_date FROM transactions")
+        transactions = self.cursor.fetchall()
+        for row in transactions:
             tree.insert("", tk.END, values=row)
-
-        # Modify Asset button and Function.
-        ttk.Button(portfolio_window, text = "Modify Asset", command = lambda: self.modify_asset(tree, portfolio_window)).pack(pady=10)
-
-    def modify_asset(self, tree, portfolio_window):
-        selected_item = tree.selection()
-        if not selected_item:
-            messagebox.showerror("Error", "Select an asset to modify.")
-            return
-
-        item_id = tree.item(selected_item, "values")[0]
-
-        modify_window = tk.Toplevel(portfolio_window)
-        modify_window.title("Modify Asset")
-
-        ttk.Label(modify_window, text="New Quantity:").grid(row=0, column=0, padx=5, pady=5)
-        new_quantity_entry = ttk.Entry(modify_window)
-        new_quantity_entry.grid(row=0, column=1, padx=5, pady=5)
-
-        ttk.Label(modify_window, text="New Purchase Price:").grid(row=1, column=0, padx=5, pady=5)
-        new_price_entry = ttk.Entry(modify_window)
-        new_price_entry.grid(row=1, column=1, padx=5, pady=5)
-
-        def update_asset():
-            try:
-                new_quantity = float(new_quantity_entry.get())
-                new_price = float(new_price_entry.get())
-            except ValueError:
-                messagebox.showerror("Error", "Invalid input.")
-                return
-
-            self.cursor.execute("UPDATE assets SET quantity = ?, purchase_price = ? WHERE id = ?",
-                                (new_quantity, new_price, item_id))
-            self.conn.commit()
-            messagebox.showinfo("Success", "Asset modified.")
-            modify_window.destroy()
-            self.view_portfolio() #refresh the view.
-
-        ttk.Button(modify_window, text="Update", command=update_asset).grid(row=2, column=0, columnspan=2, pady=10)
 
     def __del__(self):
         if hasattr(self, 'conn') and self.conn:
