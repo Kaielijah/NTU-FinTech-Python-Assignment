@@ -1,7 +1,7 @@
 import tkinter as tk
 import visualization
 from api_integration import StockSearchApp
-from portfolio import PortfolioManager
+from portfolio import PortfolioTracker
 from visualization import VisualizationApp
 
 class MainApp:
@@ -46,7 +46,7 @@ class MainApp:
 
     def open_portfolio(self):
         portfolio_window = tk.Toplevel(self.root)
-        PortfolioManager(portfolio_window)
+        PortfolioTracker(portfolio_window)
 
     def open_visualization(self):
         visualization_window = tk.Toplevel(self.root)
