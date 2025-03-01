@@ -4,6 +4,10 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 
 class VisualizationApp: 
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Stock Visualization")
+
     def get_stock_price(ticker):
         """
         Fetches the latest stock price using yfinance.

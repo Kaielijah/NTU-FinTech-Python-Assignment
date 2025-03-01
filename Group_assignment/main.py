@@ -50,7 +50,8 @@ class MainApp:
 
     def open_visualization(self):
         visualization_window = tk.Toplevel(self.root)
-        VisualizationApp()
+        VisualizationApp(visualization_window)
+
 
 if __name__ == "__main__":
     root = tk.Tk()
