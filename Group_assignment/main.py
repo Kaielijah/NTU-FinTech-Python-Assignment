@@ -28,13 +28,31 @@ class MainApp:
         frame_buttons = tk.Frame(self.root, bg="white")
         frame_buttons.pack(pady=10)
 
-        tk.Button(frame_buttons, text="Submit", font=("Arial", 12), width=14, bg="#4CAF50", fg="white", relief="raised", command=self.submit_details).grid(row=0, column=0, padx=10, pady=10)
-        tk.Button(frame_buttons, text="Reset", font=("Arial", 12), width=14, bg="#f44336", fg="white", relief="raised", command=self.reset_fields).grid(row=0, column=1, padx=10, pady=10)
+        tk.Button(frame_buttons, text="Submit", font=("Arial", 12), width=14,
+                  bg="#17C3B2", fg="white", relief="flat", bd=0, activebackground="#14A095",
+                  highlightthickness=0, highlightbackground="#17C3B2", padx=10, pady=5,
+                  command=self.submit_details).grid(row=0, column=0, padx=10, pady=10)
 
-        # Feature Buttons
-        tk.Button(self.root, text="Search Stock", font=("Arial", 12), bg="#2196F3", fg="white", width=20, relief="raised", command=self.open_stock_search).pack(pady=5)
-        tk.Button(self.root, text="Manage Portfolio", font=("Arial", 12), bg="#FF9800", fg="white", width=20, relief="raised", command=self.open_portfolio).pack(pady=5)
-        tk.Button(self.root, text="Visualize Stock Data", font=("Arial", 12), bg="#9C27B0", fg="white", width=20, relief="raised", command=self.open_visualization).pack(pady=5)
+        tk.Button(frame_buttons, text="Reset", font=("Arial", 12), width=14,
+                  bg="#FE6D73", fg="white", relief="flat", bd=0, activebackground="#D84C5F",
+                  highlightthickness=0, highlightbackground="#FE6D73", padx=10, pady=5,
+                  command=self.reset_fields).grid(row=0, column=1, padx=10, pady=10)
+
+        # Feature Buttons (macOS Fix: Use `compound="center"`)
+        tk.Button(self.root, text="Search Stock", font=("Arial", 12, "bold"),
+                  bg="#FFCB77", fg="black", width=20, relief="flat", bd=0,
+                  activebackground="#E0B05F", padx=10, pady=5, compound="center",
+                  command=self.open_stock_search).pack(pady=5)
+
+        tk.Button(self.root, text="Manage Portfolio", font=("Arial", 12, "bold"),
+                  bg="#4A5899", fg="white", width=20, relief="flat", bd=0,
+                  activebackground="#39447A", padx=10, pady=5, compound="center",
+                  command=self.open_portfolio).pack(pady=5)
+
+        tk.Button(self.root, text="Visualize Stock Data", font=("Arial", 12, "bold"),
+                  bg="#559CAD", fg="white", width=20, relief="flat", bd=0,
+                  activebackground="#417A8B", padx=10, pady=5, compound="center",
+                  command=self.open_visualization).pack(pady=5)
 
         # Label for Portfolio Status
         self.label_portfolio = tk.Label(self.root, text="Portfolio View", font=("Arial", 14, "bold"), bg="white", fg="#333333")
