@@ -12,6 +12,10 @@ python -m ensurepip --default-pip
 
 # Install CustomTkinter
 pip install customtkinter
+
+# Install mplfinance 
+pip install mplfinanceI
+
 ```
 
 ### **macOS**
@@ -53,6 +57,10 @@ pip3 install customtkinter
 ```sh
 # Run the main application
 python main.py#
+
+# kill python jobs
+disown
+pkill -f python3
 
 # Check installed dependencies
 pip list
