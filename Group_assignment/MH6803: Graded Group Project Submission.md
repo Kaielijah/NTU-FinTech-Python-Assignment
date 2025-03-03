@@ -141,4 +141,25 @@ EXIT;
 #Verify MySQL is Working
 mysqladmin -u root -p version
 
+## **Reset MySQL Root Password (If Forgotten)**
+```bash
+brew services stop mysql@8.4
+sudo pkill -9 mysql
+sudo /usr/local/opt/mysql@8.4/bin/mysqld_safe --skip-grant-tables --skip-networking &
+mysql -u root
+
+#Inside MySQL:
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'YourNewSecurePassword';
+FLUSH PRIVILEGES;
+EXIT;
+
+#Then, restart MySQL:
+sudo pkill -9 mysqld_safe
+sudo pkill -9 mysql
+brew services restart mysql@8.4
+
+#Try logging in again:
+mysql -u root -p
+
+
 ```
