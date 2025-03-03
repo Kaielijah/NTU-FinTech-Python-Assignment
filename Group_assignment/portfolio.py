@@ -1,11 +1,15 @@
-import tkinter as tk
+import customtkinter as ctk
 from tkinter import ttk, messagebox
 import sqlite3
+from CTkMessagebox import CTkMessagebox
+import theme as theme
 
 class PortfolioTracker:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Financial Portfolio Tracker")
+    
+    def __init__(self, parent_frame):
+        self.parent_frame = parent_frame  # Assigning correct reference
+        self.title_label = theme.create_label(self.parent_frame, "Financial Portfolio Tracker")
+        self.title_label.pack(pady=10)
 
         # Database Connection
         self.conn = sqlite3.connect("portfolio.db")
@@ -27,7 +31,7 @@ class PortfolioTracker:
 
     def create_widgets(self):
         # Add Transaction Frame
-        add_frame = ttk.LabelFrame(self.root, text="Add Transaction")
+        add_frame = ttk.LabelFrame(self.parent_frame, text="Add Transaction")
         add_frame.pack(padx=10, pady=10, fill="x")
 
         ttk.Label(add_frame, text="Asset Name:").grid(row=0, column=0, padx=5, pady=5)
@@ -42,15 +46,22 @@ class PortfolioTracker:
         self.purchase_price_entry = ttk.Entry(add_frame)
         self.purchase_price_entry.grid(row=2, column=1, padx=5, pady=5)
 
-        self.transaction_type_var = tk.StringVar(value="buy")
+        self.transaction_type_var = ctk.StringVar(value="buy")
         ttk.Label(add_frame, text="Transaction Type:").grid(row=3, column=0, padx=5, pady=5)
         transaction_type_dropdown = ttk.Combobox(add_frame, textvariable=self.transaction_type_var, values=["buy", "sell"])
         transaction_type_dropdown.grid(row=3, column=1, padx=5, pady=5)
 
         ttk.Button(add_frame, text="Add Transaction", command=self.add_transaction).grid(row=4, column=0, columnspan=2, pady=10)
 
-        # View Portfolio Button
-        ttk.Button(self.root, text="View Portfolio", command=self.view_portfolio).pack(pady=10)
+        # View Portfolio Section (Now inside the UI, not a new window)
+        self.portfolio_frame = theme.create_frame(self.parent_frame)
+        self.portfolio_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        self.view_portfolio()
+        
+        # Transaction History Section
+        self.transaction_frame = theme.create_frame(self.parent_frame)
+        self.transaction_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        self.view_transaction_history()
 
     def add_transaction(self):
         asset_name = self.asset_name_entry.get()
@@ -69,19 +80,19 @@ class PortfolioTracker:
         self.clear_entries()
 
     def clear_entries(self):
-        self.asset_name_entry.delete(0, tk.END)
-        self.quantity_entry.delete(0, tk.END)
-        self.purchase_price_entry.delete(0, tk.END)
+        self.asset_name_entry.delete(0, ctk.END)
+        self.quantity_entry.delete(0, ctk.END)
+        self.purchase_price_entry.delete(0, ctk.END)
 
     def view_portfolio(self):
-        portfolio_window = tk.Toplevel(self.root)
-        portfolio_window.title("Portfolio Details")
+        for widget in self.portfolio_frame.winfo_children():
+            widget.destroy()
 
-        tree = ttk.Treeview(portfolio_window, columns=("Asset Name", "Quantity", "Average Price"), show="headings")
+        tree = ttk.Treeview(self.portfolio_frame, columns=("Asset Name", "Quantity", "Average Price"), show="headings")
         tree.heading("Asset Name", text="Asset Name")
         tree.heading("Quantity", text="Quantity")
         tree.heading("Average Price", text="Average Price")
-        tree.pack(padx=10, pady=10)
+        tree.pack(fill="both", expand=True, padx=10, pady=10)
 
         # Calculate current holdings
         asset_holdings = {}
@@ -102,32 +113,34 @@ class PortfolioTracker:
             quantity = holdings["quantity"]
             if quantity > 0:
                 average_price = holdings["total_price"] / quantity
-                tree.insert("", tk.END, values=(asset_name, quantity, average_price))
+                tree.insert("", "end", values=(asset_name, quantity, average_price))
 
-        ttk.Button(portfolio_window, text = "View Transaction History", command = lambda: self.view_transaction_history(portfolio_window)).pack(pady=10)
+    def view_transaction_history(self):
+        for widget in self.transaction_frame.winfo_children():
+            widget.destroy()
 
-    def view_transaction_history(self, portfolio_window):
-        transaction_history_window = tk.Toplevel(portfolio_window)
-        transaction_history_window.title("Transaction History")
-
-        tree = ttk.Treeview(transaction_history_window, columns=("Asset Name", "Transaction Type", "Quantity", "Price", "Date"), show="headings")
+        tree = ttk.Treeview(self.transaction_frame, columns=("Asset Name", "Transaction Type", "Quantity", "Price", "Date"), show="headings")
         tree.heading("Asset Name", text="Asset Name")
         tree.heading("Transaction Type", text="Transaction Type")
         tree.heading("Quantity", text="Quantity")
         tree.heading("Price", text="Price")
         tree.heading("Date", text="Date")
-        tree.pack(padx=10, pady=10)
+        tree.pack(fill="both", expand=True, padx=10, pady=10)
 
         self.cursor.execute("SELECT asset_name, transaction_type, quantity, price, transaction_date FROM transactions")
         transactions = self.cursor.fetchall()
-        for row in transactions:
-            tree.insert("", tk.END, values=row)
+        
+        if not transactions:
+            messagebox.showinfo("Info", "No transaction history found.")
+        else:
+            for row in transactions:
+                tree.insert("", "end", values=row)
 
     def __del__(self):
         if hasattr(self, 'conn') and self.conn:
             self.conn.close()
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = ctk.CTk()
     app = PortfolioTracker(root)
     root.mainloop()

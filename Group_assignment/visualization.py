@@ -1,130 +1,86 @@
 import pandas as pd
 import yfinance as yf
-import tkinter as tk
-from tkinter import ttk, messagebox
+import customtkinter as ctk
+from CTkMessagebox import CTkMessagebox
 import matplotlib.pyplot as plt
-
+import theme
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class VisualizationApp:
-    def __init__(self, root):
-        """Initialize the visualization GUI"""
-        self.root = root
-        self.root.title("Stock Portfolio Allocation")
-        self.root.geometry("900x500")
-
+    def __init__(self, parent_frame):
+        """Initialize the Visualization App inside the main frame."""
+        self.parent_frame = parent_frame
+        self.stocks = {}
         self.create_widgets()
 
     def create_widgets(self):
-        """Create UI elements"""
-        tk.Label(self.root, text="Stock Ticker:").grid(row=0, column=0)
-        self.entry_ticker = tk.Entry(self.root)
-        self.entry_ticker.grid(row=0, column=1)
+        """Creates UI elements for Stock Visualization."""
+        for widget in self.parent_frame.winfo_children():
+            widget.destroy()
 
-        tk.Label(self.root, text="Investment:").grid(row=1, column=0)
-        self.entry_investment = tk.Entry(self.root)
-        self.entry_investment.grid(row=1, column=1)
+        # Title label
+        self.title_label = theme.create_label(self.parent_frame, "Stock Portfolio Allocation")
+        self.title_label.pack(pady=10)
 
-        tk.Button(self.root, text="Add Stock", command=self.add_stock).grid(row=2, column=0, columnspan=2)
+        # Input Fields
+        self.input_frame = theme.create_frame(self.parent_frame)
+        self.input_frame.pack(fill="x", padx=20, pady=10)
+        
+        theme.create_label(self.input_frame, "Stock Ticker:").pack()
+        self.entry_ticker = theme.create_entry(self.input_frame)
+        self.entry_ticker.pack()
 
-        self.stock_list = ttk.Treeview(self.root, columns=("Ticker", "Investment"), show="headings")
-        self.stock_list.heading("Ticker", text="Ticker")
-        self.stock_list.heading("Investment", text="Investment")
-        self.stock_list.grid(row=3, column=0, columnspan=2)
+        theme.create_label(self.input_frame, "Investment ($):").pack()
+        self.entry_investment = theme.create_entry(self.input_frame)
+        self.entry_investment.pack()
 
-        tk.Button(self.root, text="Run Analysis", command=self.run_analysis).grid(row=4, column=0, columnspan=2)
+        # Add Button
+        self.add_stock_button = theme.create_button(self.input_frame, "Add Stock", self.add_stock)
+        self.add_stock_button.pack(pady=10)
 
-        columns = ("Ticker", "Price", "Market Cap", "Volume", "Sector", "Investment", "Allocation (%)")
-        self.tree = ttk.Treeview(self.root, columns=columns, show="headings")
-        for col in columns:
-            self.tree.heading(col, text=col)
-            self.tree.column(col, width=100)
-        self.tree.grid(row=5, column=0, columnspan=2)
+        # Portfolio List Frame
+        self.portfolio_list_frame = theme.create_frame(self.parent_frame)
+        self.portfolio_list_frame.pack(fill="both", expand=True, padx=20, pady=10)
 
-    def fetch_stock_data(self, tickers):
-        """Fetch stock data for given tickers."""
-        data = []
-        for ticker in tickers:
-            stock = yf.Ticker(ticker)
-            info = stock.info
-            data.append({
-                'Ticker': ticker,
-                'Price': info.get('regularMarketPrice', None),
-                'Market Cap': info.get('marketCap', None),
-                'Volume': info.get('regularMarketVolume', None),
-                'Sector': info.get('sector', 'Unknown')
-            })
-        return pd.DataFrame(data)
-
-    def calculate_portfolio_allocation(self, df, investments):
-        """Calculate the portfolio allocation based on user input investments."""
-        df['Investment'] = investments
-        total_investment = sum(investments)
-        df['Allocation (%)'] = (df['Investment'] / total_investment) * 100
-        return df
-
-    def plot_pie_chart(self, df):
-        """Display a pie chart for portfolio allocation."""
-        labels = df['Ticker']
-        sizes = df['Allocation (%)']
-
-        plt.figure(figsize=(6, 6))
-        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
-        plt.title("Portfolio Allocation (%)")
-        plt.show()
+        # Run Analysis Button
+        self.run_analysis_button = theme.create_button(self.parent_frame, "Run Analysis", self.run_analysis)
+        self.run_analysis_button.pack(pady=10)
 
     def add_stock(self):
-        """Add a stock ticker and investment amount to the list."""
-        ticker = self.entry_ticker.get().strip()
+        """Adds stock to portfolio list."""
+        ticker = self.entry_ticker.get().strip().upper()
         investment = self.entry_investment.get().strip()
-        if ticker and investment:
-            try:
-                investment = float(investment)
-                self.stock_list.insert("", "end", values=(ticker, investment))
-                self.entry_ticker.delete(0, tk.END)
-                self.entry_investment.delete(0, tk.END)
-            except ValueError:
-                messagebox.showerror("Error", "Invalid investment amount. Please enter a number.")
+
+        if not ticker or not investment:
+            CTkMessagebox(title="Error", message="Please enter valid stock details.", icon="warning")
+            return
+        
+        try:
+            investment = float(investment)
+        except ValueError:
+            CTkMessagebox(title="Error", message="Investment must be a number.", icon="warning")
+            return
+        
+        self.stocks[ticker] = investment
+        stock_label = theme.create_label(self.portfolio_list_frame, f"{ticker}: ${investment}")
+        stock_label.pack()
 
     def run_analysis(self):
-        """Perform portfolio analysis and visualization"""
-        try:
-            tickers = []
-            investments = []
-            for item in self.stock_list.get_children():
-                ticker, investment = self.stock_list.item(item, "values")
-                tickers.append(ticker)
-                investments.append(float(investment))
-
-            if not tickers:
-                messagebox.showerror("Error", "Please add at least one stock.")
-                return
-
-            stocks_df = self.fetch_stock_data(tickers)
-            allocated_stocks = self.calculate_portfolio_allocation(stocks_df, investments)
-
-            for row in self.tree.get_children():
-                self.tree.delete(row)
-
-            for _, row in allocated_stocks.iterrows():
-                self.tree.insert("", "end", values=(
-                    row['Ticker'], row['Price'], row['Market Cap'], row['Volume'], row['Sector'], row['Investment'],
-                    f"{row['Allocation (%)']:.2f}%"))
-
-            self.plot_pie_chart(allocated_stocks)
-        except ValueError:
-            messagebox.showerror("Error",
-                                 "Invalid input: Ensure all investments are numbers and fields are correctly filled.")
-
-
-# Function to launch visualization when called from main.py
-def start_visualization():
-    root = tk.Toplevel()  # Open in a new window
-    app = VisualizationApp(root)
-    root.mainloop()
-
-
-# ONLY run the GUI if this script is executed directly
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = VisualizationApp(root)
-    root.mainloop()
+        """Performs stock allocation visualization."""
+        if not self.stocks:
+            CTkMessagebox(title="Error", message="No stocks added. Please add stocks to analyze.", icon="warning")
+            return
+        
+        tickers = list(self.stocks.keys())
+        investments = list(self.stocks.values())
+        
+        # Create Pie Chart
+        fig, ax = plt.subplots()
+        ax.pie(investments, labels=tickers, autopct="%1.1f%%", startangle=90)
+        ax.set_title("Portfolio Allocation")
+        
+        # Display in Tkinter
+        canvas = FigureCanvasTkAgg(fig, master=self.parent_frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.pack(pady=10)
+        canvas.draw()

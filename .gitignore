@@ -1,2 +1,19 @@
 # Ignore API Key storage
 .env
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment folder
+venv/
+
+# IDE settings
+.idea/
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
