@@ -91,7 +91,7 @@ sudo pkill -9 mysql
 # Enter safemode 
 sudo mysqld_safe --skip-grant-tables --skip-networking &
 --skip-grant-tables: Allows logging in without a password
---skip-networking: Ensures MySQL isn't accessible remotely (security measure)
+--skip-networking: Ensures MySQL is not accessible remotely (security measure)
 
 # Check error log
 tail -n 50 /usr/local/var/mysql/*.err
@@ -114,3 +114,26 @@ sudo kill -9 <PID>
 # Remove Corrupted MySQL Data (Fix Downgrade Issue)
 remove the MySQL data directory: 
 sudo rm -rf /usr/local/var/mysql
+
+# Reinitialize MySQL 8.4
+# initialize MySQL manually:
+sudo /usr/local/opt/mysql@8.4/bin/mysqld --initialize --user=mysql --datadir=/usr/local/var/mysql
+# A temporary root password is generated (copy and save it).
+
+# Start MySQL Properly
+brew services restart mysql@8.4
+
+# Verify that MySQL is running:
+ps aux | grep mysql
+
+# Log in to MySQL
+mysql -u root -p
+
+# Reset Root Password (If Needed)
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'YourNewSecurePassword';
+FLUSH PRIVILEGES;
+EXIT;
+
+#Verify MySQL is Working
+mysqladmin -u root -p version
+
