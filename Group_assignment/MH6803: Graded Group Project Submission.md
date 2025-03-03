@@ -67,6 +67,10 @@ pip list
 
 # Install python-tk
 brew install python-tk
+```
+## **Commands to Troubleshoot SQL**
+
+```sh
 
 # Upgrade SQL
 Upgrading from MySQL <8.4 to MySQL >9.0 requires running MySQL 8.4 first:
@@ -137,3 +141,4 @@ EXIT;
 #Verify MySQL is Working
 mysqladmin -u root -p version
 
+```
