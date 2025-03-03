@@ -64,3 +64,53 @@ pkill -f python3
 
 # Check installed dependencies
 pip list
+
+# Install python-tk
+brew install python-tk
+
+# Upgrade SQL
+Upgrading from MySQL <8.4 to MySQL >9.0 requires running MySQL 8.4 first:
+ - brew services stop mysql
+ - brew install mysql@8.4
+ - brew services start mysql@8.4
+ - brew services stop mysql@8.4
+ - brew services start mysql
+
+To secure it run:
+    mysql_secure_installation
+
+MySQL is configured to only allow connections from localhost by default
+To connect run:
+    mysql -u root
+
+# Troubleshooting for sql for logging issues due to authentication
+# Stop all services 
+brew services stop mysql
+sudo pkill -9 mysql
+
+# Enter safemode 
+sudo mysqld_safe --skip-grant-tables --skip-networking &
+--skip-grant-tables: Allows logging in without a password
+--skip-networking: Ensures MySQL isn't accessible remotely (security measure)
+
+# Check error log
+tail -n 50 /usr/local/var/mysql/*.err
+
+# MySQL 8.4 Troubleshooting on macOS (Homebrew)
+
+# Stop Any Running MySQL Processes**
+# Before troubleshooting, ensure MySQL is completely stopped.
+brew services stop mysql@8.4
+sudo pkill -9 mysql
+sudo pkill -9 mysqld_safe
+
+# After stopping, verify that no MySQL processes are still active.
+ps aux | grep mysql
+
+# If you see a running mysqld process, kill it manually:
+sudo kill -9 <PID>
+
+
+# Remove Corrupted MySQL Data (Fix Downgrade Issue)
+remove the MySQL data directory: 
+sudo rm -rf /usr/local/var/mysql
