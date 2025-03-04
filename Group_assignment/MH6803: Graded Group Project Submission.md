@@ -10,11 +10,8 @@ winget install Python.Python.3.11
 # Install pip (if not already installed)
 python -m ensurepip --default-pip
 
-# Install CustomTkinter
-pip install customtkinter
-
-# Install mplfinance 
-pip install mplfinanceI
+# Install dependencies
+pip install -r requirements.txt
 
 ```
 
@@ -29,13 +26,15 @@ brew install python3
 # Install pip (if not installed)
 pip3 install --upgrade pip
 
-# Install CustomTkinter
-pip3 install customtkinter
+# Install dependencies
+pip install -r requirements.txt
 ```
 
 ### **CustomTkinter Documentation**
 [CustomTkinter Website](https://customtkinter.tomschimansky.com/)
 
+### **Ctk Theme Builder
+[ctk-theme-builder](https://github.com/avalon60/ctk_theme_builder/wiki/Installing-&-Upgrading-CTk-Theme-Builder)
 ---
 
 ## **Summarise the Key Features of the Program**
@@ -142,7 +141,7 @@ EXIT;
 mysqladmin -u root -p version
 
 ## **Reset MySQL Root Password (If Forgotten)**
-```bash
+```sh
 brew services stop mysql@8.4
 sudo pkill -9 mysql
 sudo /usr/local/opt/mysql@8.4/bin/mysqld_safe --skip-grant-tables --skip-networking &
@@ -160,6 +159,4 @@ brew services restart mysql@8.4
 
 #Try logging in again:
 mysql -u root -p
-
-
-```
+```sh
