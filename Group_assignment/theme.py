@@ -34,5 +34,8 @@ def create_frame(master):
     border_color = THEME["CTkFrame"]["border_color"][0]
     return ctk.CTkFrame(master, fg_color=fg_color, border_color=border_color)
 
+def create_listbox(parent):
+    return ctk.CTkTextbox(parent, height=100, wrap="none")
+
 # Set global theme settings
 ctk.set_appearance_mode("dark")

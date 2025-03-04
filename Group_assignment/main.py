@@ -6,7 +6,7 @@ from api_integration import StockSearchApp
 from portfolio import PortfolioTracker
 from visualization import VisualizationApp
 from dashboard import DashboardApp  # Import the Dashboard class
-
+import os
 class MainApp:
     def __init__(self, root):
         self.root = root
