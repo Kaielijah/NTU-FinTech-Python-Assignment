@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ### **CustomTkinter Documentation**
 [CustomTkinter Website](https://customtkinter.tomschimansky.com/)
 
-### **Ctk Theme Builder
+### **Ctk Theme Builder**
 [ctk-theme-builder](https://github.com/avalon60/ctk_theme_builder/wiki/Installing-&-Upgrading-CTk-Theme-Builder)
 ---
 
