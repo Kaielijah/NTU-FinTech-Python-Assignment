@@ -33,28 +33,25 @@ Please select a function to continue:
             continue
 
         if function == 1:
-            next_step = 1
             print(f"Selected: {function}")
             result = check_code()
 
             if result:
                 input_keyword, ticker, check_code_next = result
-            else:
-                input_keyword, ticker, check_code_next = None, None, None  # Handle case where function returns None
-
-            if ticker:
-                view_trend(input_keyword, word, function, check_code_next)
+                return word, function, input_keyword, check_code_next
             else:
                 print("Invalid ticker. Returning to menu.")
-            return word,function,ticker
+                return user_input()  # Restart menu
         elif function == 2:
-            next_step = 2
             print(f"Selected: {function}")
-            break
+            input_keyword = input("Enter stock code: ").strip().upper()
+            if not input_keyword:
+                print("No stock code entered. Returning to menu.")
+                return user_input()
+                # Proceed directly to view_trend() function
+            return view_trend(input_keyword, word, function, None)
         else:
             print("Invalid input. Please enter either 1 or 2.")
-
-    return word,function,next_step
 
 
 def check_code():
@@ -98,29 +95,31 @@ def check_code():
 def view_trend(input_keyword, word, function, check_code_next):
     if not input_keyword:
         print("Invalid ticker. Returning to menu.")
-        return None, None, None, None, None, None  # Ensure all variables are returned
+        return user_input()  # Ensure all variables are returned
 
     print(f"Fetching trend data for ticker: {input_keyword}")
 
-    try:
+    while True:
         input_start = input("Enter start date (DD-MM-YYYY): ").strip()
         input_end = input("Enter end date (DD-MM-YYYY): ").strip()
-    except KeyboardInterrupt:
-        print("\nProcess interrupted by user. Returning to menu...")
-        return None, None, None, None, None, None
 
-    try:
-        start_date = datetime.strptime(input_start, "%d-%m-%Y").strftime("%Y-%m-%d")
-        end_date = datetime.strptime(input_end, "%d-%m-%Y").strftime("%Y-%m-%d")
-        df = yf.download(input_keyword, start=start_date, end=end_date, auto_adjust=False)
+        if not input_start or not input_end:  # Check if either input is empty
+            print("Error: Date cannot be empty. Please enter a valid date.")
+            continue  # Restart loop
 
-        if df.empty:
-            print("No data found for the given ticker and date range. Returning to menu.")
-            return None, None, None, None, None, None
+        try:
+            start_date = datetime.strptime(input_start, "%d-%m-%Y").strftime("%Y-%m-%d")
+            end_date = datetime.strptime(input_end, "%d-%m-%Y").strftime("%Y-%m-%d")
+            df = yf.download(input_keyword, start=start_date, end=end_date, auto_adjust=False)
+            break
+        except ValueError:
+            print('Invalid date format. Please enter dates in DD-MM-YYYY format.')
+            return user_input()
 
-    except ValueError:
-        print("Invalid date format. Please enter dates in DD-MM-YYYY format.")
-        return None, None, None, None, None, None
+
+    if df.empty:
+        print("No data found for the given ticker and date range. Returning to menu.")
+        return user_input()
 
     # Flatten MultiIndex Columns
     if isinstance(df.columns, pd.MultiIndex):
@@ -132,14 +131,14 @@ def view_trend(input_keyword, word, function, check_code_next):
     missing_cols = [col for col in required_cols if col not in df.columns]
     if missing_cols:
         print(f"Error: Missing required columns: {missing_cols}. Data may be unavailable for this stock.")
-        return None, None, None, None, None, None
+        return user_input()
 
     df[required_cols] = df[required_cols].apply(pd.to_numeric, errors='coerce')
     df.dropna(subset=required_cols, inplace=True)
 
     if df.empty:
         print("Error: No valid numerical data available after cleaning. Try another stock.")
-        return None, None, None, None, None, None
+        return user_input()
 
     print("""
     Please select type of graph.
@@ -158,13 +157,13 @@ def view_trend(input_keyword, word, function, check_code_next):
 
     if not graph_choices:
         print("No input received. Returning to menu.")
-        return None, None, None, None, None, None
+        return user_input()
 
     try:
         graph_choices = [int(choice) for choice in graph_choices if choice.isdigit()]
     except ValueError:
         print("Invalid graph choices. Please enter numbers between 1-8.")
-        return None, None, None, None, None, None
+        return user_input()
 
     valid_choices = {1, 2, 3, 4, 5, 6, 7, 8}
     invalid_inputs = [choice for choice in graph_choices if choice not in valid_choices]
@@ -246,24 +245,18 @@ def view_trend(input_keyword, word, function, check_code_next):
     # ask for next step
     next_step = input().strip()
     if next_step == "1":
-        next_word, next_request_next = next_request()
-        return input_keyword, input_start, input_end, graph_choices, ma_list, "Completed", next_word
-
+        return user_input()
 
     elif next_step == "2":
 
         print("Exiting program...")
 
-        year, month, day = input_to_date()
+        year, month, day = input_to_date(input_start)
 
-        print_end(str(word), str(function), input_keyword, check_code_next,
+        print_end(word, function, input_keyword, check_code_next,
                   input_keyword, input_start, input_end, graph_choices, ma_list,
-                  "Exited", year, month, day, None,
-                  "Completed", None)
-
+                  "Exited", year, month, day, None, "Completed", None)
         sys.exit(0)
-
-    return ticker, input_start, input_end, graph_choices, ma_list, "Completed"
 
 
 def next_request():
@@ -282,53 +275,29 @@ Would you like to
     return next_word,next_step
 
 
-def input_to_date():
-
-    #string to integer
-
-    year = 2020
-    month = 2
-    day = 2
-
-    #integer to datetime
-
-    #return
-    return year,month,day
+def input_to_date(input_start):
+    try:
+        date_obj = datetime.strptime(input_start, "%d-%m-%Y")
+        return date_obj.year, date_obj.month, date_obj.day
+    except ValueError:
+        return None, None, None
 
 def main():
-    word, function, input_keyword, check_code_next = user_input()
-    code, input_start, input_end, graph_choice, ma, view_trend_next = view_trend(input_keyword, word, function, check_code_next)
+    result = user_input()
+    if isinstance(result, tuple):
+        word, function, input_keyword, check_code_next = result
+        view_trend(input_keyword, word, function, check_code_next)
+    else:
+        main()  # Restart if user_input() returns to the menu
 
-    next_word, next_request_next = next_request()
-    year, month, day = input_to_date()
-
-    print_end(word, function, input_keyword, check_code_next,
-              code, input_start, input_end, graph_choices, ma,
-              next_word, year, month, day, None,
-              view_trend_next, next_request_next)
-
-    # input_keyword, check_code_next = check_code()
-    # Ensure view_trend() runs and captures variables correctly
-    try:
-        code, input_start, input_end, graph_choice, ma, view_trend_next = view_trend(word, function, input_keyword, check_code_next)
-    except TypeError:
-        print("Error occurred in view_trend() function. Skipping variable capture.")
-
-    # Get next step request
-    next_word, next_request_next = next_request()
-
-    # Ensure all date-related variables are captured
-    year, month, day = input_to_date()
-
-def print_end(word, function, input_keyword, check_code_next,
-    code, input_start, input_end, graph_choice, ma,
-    next_word, year, month, day, user_input_next,
-    view_trend_next, next_request_next):
+def print_end(word, function, input_keyword, check_code_next, code, input_start, input_end,
+                  graph_choice, ma, next_word, year, month, day, user_input_next,
+                  view_trend_next, next_request_next):
     print('---------------------------------------------------')
     print('Below are the variables defined and their contents:')
     print('---------------------------------------------------\n')
     print(str(type(word))+ ' word : '+ word)
-    print(str(type(function))+ ' function : '+ function)
+    print(str(type(function))+ ' function : '+ str(function))
     print(str(type(input_keyword))+ ' input_keyword : '+ input_keyword)
     print(str(type(code))+ ' code : '+ code)
     print(str(type(input_start))+ ' input_start : '+ input_start)
@@ -343,7 +312,6 @@ def print_end(word, function, input_keyword, check_code_next,
     print(str(type(check_code_next)) + ' check_code_next : ' + str(check_code_next))
     print(str(type(view_trend_next)) + ' view_trend_next : ' + str(view_trend_next))
     print(str(type(next_request_next)) + ' next_request_next : ' + str(next_request_next))
-  #function call
 
 if __name__== "__main__":
   main()
