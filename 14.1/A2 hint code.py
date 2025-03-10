@@ -91,10 +91,10 @@ def input_to_date():
 
 def main():
     word,function,user_input_next = user_input()
-    input_keyword,check_code_next = check_code()
-    code,input_start,input_end,graph_choice,ma,view_trend_next = view_trend()
-    next_word,next_request_next= next_request()
-    year,month,day = input_to_date()
+    # input_keyword,check_code_next = check_code()
+    # code,input_start,input_end,graph_choice,ma,view_trend_next = view_trend()
+    # next_word,next_request_next= next_request()
+    # year,month,day = input_to_date()
 
     print('---------------------------------------------------')
     print('Below are the variables defined and their contents:')
