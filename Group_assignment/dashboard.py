@@ -7,14 +7,14 @@ from watchlist import Watchlist
 import json
 
 class DashboardApp:
-    def __init__(self, root, user_name, budget):
+    def __init__(self, root, user_name, budget, watchlist=None):
         self.root = root
         self.root.title("Dashboard")
         self.root.geometry("1080x800")
 
         self.user_name = user_name
         self.budget = budget
-        self.watchlist = []
+        self.watchlist = watchlist if watchlist is not None else []
 
         self.create_dashboard()
 
