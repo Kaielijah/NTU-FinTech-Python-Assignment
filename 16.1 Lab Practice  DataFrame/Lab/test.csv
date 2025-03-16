@@ -1,0 +1,94 @@
+Symbol,Nasdaq Traded,Security Name,Listing Exchange,Market Category,ETF,Round Lot Size,Test Issue,Financial Status,CQS Symbol,NASDAQ Symbol,NextShares
+A,TRUE,"Agilent Technologies, Inc. Common Stock",N, ,FALSE,100,FALSE,,A,A,FALSE
+AA,TRUE,Alcoa Corporation Common Stock ,N, ,FALSE,100,FALSE,,AA,AA,FALSE
+AAAU,TRUE,Perth Mint Physical Gold ETF,P, ,TRUE,100,FALSE,,AAAU,AAAU,FALSE
+AACG,TRUE,"ATA Creativity Global - American Depositary Shares, each representing two common shares",Q,G,FALSE,100,FALSE,N,,AACG,FALSE
+AADR,TRUE,AdvisorShares Dorsey Wright ADR ETF,P, ,TRUE,100,FALSE,,AADR,AADR,FALSE
+AAL,TRUE,"American Airlines Group, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,AAL,FALSE
+AAMC,TRUE,Altisource Asset Management Corp Com,A, ,FALSE,100,FALSE,,AAMC,AAMC,FALSE
+AAME,TRUE,Atlantic American Corporation - Common Stock,Q,G,FALSE,100,FALSE,N,,AAME,FALSE
+AAN,TRUE,"Aaron's, Inc. Common Stock",N, ,FALSE,100,FALSE,,AAN,AAN,FALSE
+AAOI,TRUE,"Applied Optoelectronics, Inc. - Common Stock",Q,G,FALSE,100,FALSE,N,,AAOI,FALSE
+AAON,TRUE,"AAON, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,AAON,FALSE
+AAP,TRUE,Advance Auto Parts Inc Advance Auto Parts Inc W/I,N, ,FALSE,100,FALSE,,AAP,AAP,FALSE
+AAPL,TRUE,Apple Inc. - Common Stock,Q,Q,FALSE,100,FALSE,N,,AAPL,FALSE
+AAT,TRUE,"American Assets Trust, Inc. Common Stock",N, ,FALSE,100,FALSE,,AAT,AAT,FALSE
+AAU,TRUE,"Almaden Minerals, Ltd. Common Shares",A, ,FALSE,100,FALSE,,AAU,AAU,FALSE
+AAWW,TRUE,Atlas Air Worldwide Holdings - Common Stock,Q,Q,FALSE,100,FALSE,N,,AAWW,FALSE
+AAXJ,TRUE,iShares MSCI All Country Asia ex Japan Index Fund,Q,G,TRUE,100,FALSE,N,,AAXJ,FALSE
+AAXN,TRUE,"Axon Enterprise, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,AAXN,FALSE
+AB,TRUE,AllianceBernstein Holding L.P.  Units,N, ,FALSE,100,FALSE,,AB,AB,FALSE
+ABB,TRUE,ABB Ltd Common Stock,N, ,FALSE,100,FALSE,,ABB,ABB,FALSE
+ABBV,TRUE,AbbVie Inc. Common Stock,N, ,FALSE,100,FALSE,,ABBV,ABBV,FALSE
+ABC,TRUE,AmerisourceBergen Corporation Common Stock,N, ,FALSE,100,FALSE,,ABC,ABC,FALSE
+ABCB,TRUE,Ameris Bancorp - Common Stock,Q,Q,FALSE,100,FALSE,N,,ABCB,FALSE
+ABEO,TRUE,Abeona Therapeutics Inc. - Common Stock,Q,S,FALSE,100,FALSE,D,,ABEO,FALSE
+ABEQ,TRUE,Absolute Core Strategy ETF,P, ,TRUE,100,FALSE,,ABEQ,ABEQ,FALSE
+ABEV,TRUE,Ambev S.A. American Depositary Shares (Each representing 1 Common Share),N, ,FALSE,100,FALSE,,ABEV,ABEV,FALSE
+ABG,TRUE,Asbury Automotive Group Inc Common Stock,N, ,FALSE,100,FALSE,,ABG,ABG,FALSE
+ABIO,TRUE,"ARCA biopharma, Inc. - Common Stock",Q,S,FALSE,100,FALSE,N,,ABIO,FALSE
+ABM,TRUE,ABM Industries Incorporated Common Stock,N, ,FALSE,100,FALSE,,ABM,ABM,FALSE
+ABMD,TRUE,"ABIOMED, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ABMD,FALSE
+ABR,TRUE,Arbor Realty Trust Common Stock,N, ,FALSE,100,FALSE,,ABR,ABR,FALSE
+ABR$A,TRUE,Arbor Realty Trust Preferred Series A,N, ,FALSE,100,FALSE,,ABRpA,ABR-A,FALSE
+ABR$B,TRUE,Arbor Realty Trust Cumulative Redeemable Preferred Series B,N, ,FALSE,100,FALSE,,ABRpB,ABR-B,FALSE
+ABR$C,TRUE,Arbor Realty Trust Cumulative Redeemable Preferred Series C,N, ,FALSE,100,FALSE,,ABRpC,ABR-C,FALSE
+ABT,TRUE,Abbott Laboratories Common Stock,N, ,FALSE,100,FALSE,,ABT,ABT,FALSE
+ABTX,TRUE,"Allegiance Bancshares, Inc. - Common Stock",Q,G,FALSE,100,FALSE,N,,ABTX,FALSE
+ABUS,TRUE,Arbutus Biopharma Corporation - Common Stock,Q,Q,FALSE,100,FALSE,N,,ABUS,FALSE
+AC,TRUE,"Associated Capital Group, Inc. Common Stock",N, ,FALSE,100,FALSE,,AC,AC,FALSE
+ACA,TRUE,"Arcosa, Inc. Common Stock ",N, ,FALSE,100,FALSE,,ACA,ACA,FALSE
+ACAD,TRUE,ACADIA Pharmaceuticals Inc. - Common Stock,Q,Q,FALSE,100,FALSE,N,,ACAD,FALSE
+ACAM,TRUE,Acamar Partners Acquisition Corp. - Class A Common Stock,Q,S,FALSE,100,FALSE,N,,ACAM,FALSE
+ACAMU,TRUE,Acamar Partners Acquisition Corp. - Units,Q,S,FALSE,100,FALSE,N,,ACAMU,FALSE
+ACAMW,TRUE,Acamar Partners Acquisition Corp. - Warrant,Q,S,FALSE,100,FALSE,N,,ACAMW,FALSE
+ACB,TRUE,Aurora Cannabis Inc. Common Shares,N, ,FALSE,100,FALSE,,ACB,ACB,FALSE
+ACBI,TRUE,"Atlantic Capital Bancshares, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ACBI,FALSE
+ACC,TRUE,American Campus Communities Inc Common Stock,N, ,FALSE,100,FALSE,,ACC,ACC,FALSE
+ACCO,TRUE,Acco Brands Corporation Common Stock,N, ,FALSE,100,FALSE,,ACCO,ACCO,FALSE
+ACEL,TRUE,"Accel Entertainment, Inc. ",N, ,FALSE,100,FALSE,,ACEL,ACEL,FALSE
+ACEL.W,TRUE,"Accel Entertainment, Inc. Warrants",N, ,FALSE,100,FALSE,,ACEL.WS,ACEL+,FALSE
+ACER,TRUE,Acer Therapeutics Inc. - Common Stock,Q,S,FALSE,100,FALSE,N,,ACER,FALSE
+ACES,TRUE,ALPS Clean Energy ETF,Z, ,TRUE,100,FALSE,,ACES,ACES,FALSE
+ACGL,TRUE,Arch Capital Group Ltd. - Common Stock,Q,Q,FALSE,100,FALSE,N,,ACGL,FALSE
+ACGLO,TRUE,"Arch Capital Group Ltd. - Depositary Shares Each Representing 1/1,000th Interest in a Share of5.45% Non-Cumulative Preferred Shares, Series F",Q,Q,FALSE,100,FALSE,N,,ACGLO,FALSE
+ACGLP,TRUE,Arch Capital Group Ltd. - Depositary Shares Representing Interest in 5.25% Non-Cumulative Preferred Series E Shrs,Q,Q,FALSE,100,FALSE,N,,ACGLP,FALSE
+ACH,TRUE,Aluminum Corporation of China Limited American Depositary Shares,N, ,FALSE,100,FALSE,,ACH,ACH,FALSE
+ACHC,TRUE,"Acadia Healthcare Company, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ACHC,FALSE
+ACHV,TRUE,"Achieve Life Sciences, Inc.  - Common Shares",Q,S,FALSE,100,FALSE,D,,ACHV,FALSE
+ACIA,TRUE,"Acacia Communications, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ACIA,FALSE
+ACIO,TRUE,ETF Series Solutions Aptus Collared Income Opportunity ETF,Z, ,TRUE,100,FALSE,,ACIO,ACIO,FALSE
+ACIU,TRUE,AC Immune SA - Common Stock,Q,G,FALSE,100,FALSE,N,,ACIU,FALSE
+ACIW,TRUE,"ACI Worldwide, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ACIW,FALSE
+ACLS,TRUE,"Axcelis Technologies, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ACLS,FALSE
+ACM,TRUE,AECOM Common Stock,N, ,FALSE,100,FALSE,,ACM,ACM,FALSE
+ACMR,TRUE,"ACM Research, Inc. - Class A Common Stock",Q,G,FALSE,100,FALSE,N,,ACMR,FALSE
+ACN,TRUE,Accenture plc Class A Ordinary Shares (Ireland),N, ,FALSE,100,FALSE,,ACN,ACN,FALSE
+ACNB,TRUE,ACNB Corporation - Common Stock,Q,S,FALSE,100,FALSE,N,,ACNB,FALSE
+ACOR,TRUE,"Acorda Therapeutics, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ACOR,FALSE
+ACP,TRUE,Aberdeen Income Credit Strategies Fund Common Shares,N, ,FALSE,100,FALSE,,ACP,ACP,FALSE
+ACRE,TRUE,Ares Commercial Real Estate Corporation Common Stock,N, ,FALSE,100,FALSE,,ACRE,ACRE,FALSE
+ACRS,TRUE,"Aclaris Therapeutics, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ACRS,FALSE
+ACRX,TRUE,"AcelRx Pharmaceuticals, Inc. - Common Stock",Q,G,FALSE,100,FALSE,N,,ACRX,FALSE
+ACSG,TRUE,Xtrackers MSCI ACWI ex USA ESG Leaders Equity ETF,P, ,TRUE,100,FALSE,,ACSG,ACSG,FALSE
+ACSI,TRUE,American Customer Satisfaction ETF,Z, ,TRUE,100,FALSE,,ACSI,ACSI,FALSE
+ACST,TRUE,"Acasti Pharma, Inc. - Class A Common Stock",Q,S,FALSE,100,FALSE,D,,ACST,FALSE
+ACT,TRUE,AdvisorShares Vice ETF,Q,G,TRUE,100,FALSE,N,,ACT,FALSE
+ACTG,TRUE,Acacia Research Corporation - Common Stock,Q,Q,FALSE,100,FALSE,N,,ACTG,FALSE
+ACTT,TRUE,Act II Global Acquisition Corp. - Class A Ordinary Shares,Q,S,FALSE,100,FALSE,N,,ACTT,FALSE
+ACTTU,TRUE,Act II Global Acquisition Corp. - Unit,Q,S,FALSE,100,FALSE,N,,ACTTU,FALSE
+ACTTW,TRUE,Act II Global Acquisition Corp. - Warrant,Q,S,FALSE,100,FALSE,N,,ACTTW,FALSE
+ACU,TRUE,Acme United Corporation. Common Stock,A, ,FALSE,100,FALSE,,ACU,ACU,FALSE
+ACV,TRUE,AllianzGI Diversified Income & Convertible Fund Common Shares of Beneficial Interest,N, ,FALSE,100,FALSE,,ACV,ACV,FALSE
+ACWF,TRUE,iShares Edge MSCI Multifactor Global ETF,P, ,TRUE,100,FALSE,,ACWF,ACWF,FALSE
+ACWI,TRUE,iShares MSCI ACWI Index Fund,Q,G,TRUE,100,FALSE,N,,ACWI,FALSE
+ACWV,TRUE,iShares Edge MSCI Min Vol Global ETF,Z, ,TRUE,100,FALSE,,ACWV,ACWV,FALSE
+ACWX,TRUE,iShares MSCI ACWI ex US Index Fund,Q,G,TRUE,100,FALSE,N,,ACWX,FALSE
+ACY,TRUE,AeroCentury Corp. Common Stock,A, ,FALSE,100,FALSE,,ACY,ACY,FALSE
+ADAP,TRUE,Adaptimmune Therapeutics plc - American Depositary Shares,Q,Q,FALSE,100,FALSE,N,,ADAP,FALSE
+ADBE,TRUE,Adobe Inc. - Common Stock,Q,Q,FALSE,100,FALSE,N,,ADBE,FALSE
+ADC,TRUE,Agree Realty Corporation Common Stock,N, ,FALSE,100,FALSE,,ADC,ADC,FALSE
+ADES,TRUE,"Advanced Emissions Solutions, Inc. - Common Stock",Q,G,FALSE,100,FALSE,N,,ADES,FALSE
+ADI,TRUE,"Analog Devices, Inc. - Common Stock",Q,Q,FALSE,100,FALSE,N,,ADI,FALSE
+ADIL,TRUE,"Adial Pharmaceuticals, Inc - Common Stock",Q,S,FALSE,100,FALSE,N,,ADIL,FALSE
+ADILW,TRUE,"Adial Pharmaceuticals, Inc - Warrant",Q,S,FALSE,100,FALSE,N,,ADILW,FALSE
